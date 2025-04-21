@@ -1,0 +1,51 @@
+{
+    "id": 61,
+    "user_id": 4,
+    "title": "Thanh Nguyen dzai thi khoi ban nhe cac ban Thanh Nguyen dzai thi khoi ban nhe cac ban 1-2-3",
+    "about_you": null,
+    "about_lesson": null,
+    "experience": null,
+    "location_id": null,
+    "hourly_fee": 0,
+    "price_5h": 0,
+    "price_10h": 0,
+    "transportation_fee": 0,
+    "online_fee": 0,
+    "max_distance": 10,
+    "current_step": 4,
+    "status": 0,
+    "status_text": "Đang hoàn thiện",
+    "tutor_locations": [],
+    "tutor_subject_main": {
+        "id": 150,
+        "tutor_ads_id": 61,
+        "subject_id": 21,
+        "main_subject": 1,
+        "name": "Trang trí",
+        "categories_id": 7
+    },
+    "tutor_subjects": [
+        {
+            "id": 150,
+            "tutor_ads_id": 61,
+            "subject_id": 21,
+            "main_subject": 1,
+            "name": "Trang trí",
+            "categories_id": 7
+        }
+    ],
+    "tutor_levels": [
+        {
+            "id": 86,
+            "tutor_ads_id": 61,
+            "level_id": 8,
+            "name": "Đại học năm 3"
+        },
+        {
+            "id": 87,
+            "tutor_ads_id": 61,
+            "level_id": 10,
+            "name": "Đại học năm cuối"
+        }
+    ]
+}
