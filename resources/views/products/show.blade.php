@@ -62,18 +62,17 @@
                     </div>
 
                     <div class="product-actions">
-                        <form action="{{ route('cart.add', $product) }}" method="POST" class="d-flex gap-3">
-                            @csrf
+                        <div class="d-flex gap-3">
                             <div class="quantity-input">
                                 <button type="button" class="btn-quantity" onclick="decrementQuantity()">-</button>
-                                <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock }}" id="quantity">
+                                <input type="number" value="1" min="1" max="{{ $product->stock }}" id="quantity">
                                 <button type="button" class="btn-quantity" onclick="incrementQuantity()">+</button>
                             </div>
-                            <button type="submit" class="btn btn-primary flex-grow-1" {{ $product->stock < 1 ? 'disabled' : '' }}>
+                            <button type="button" class="btn btn-primary flex-grow-1" onclick="addToCart({{ $product->id }})" {{ $product->stock < 1 ? 'disabled' : '' }}>
                                 <i class="fas fa-shopping-cart me-2"></i>
                                 {{ $product->stock < 1 ? 'Hết hàng' : 'Thêm vào giỏ hàng' }}
                             </button>
-                        </form>
+                        </div>
                     </div>
 
                     <div class="product-features">

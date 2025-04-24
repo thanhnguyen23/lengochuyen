@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        // Không cần middleware auth:sanctum cho show
+    }
+
     /**
      * Hiển thị danh sách sản phẩm
      */
