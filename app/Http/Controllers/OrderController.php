@@ -12,63 +12,68 @@ class OrderController extends Controller
 {
     public function checkout()
     {
-        $cart = Cart::where('user_id', Auth::id())->with('cartItems.product')->first();
-        return view('orders.checkout', compact('cart'));
+        return view('orders.checkout');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'shipping_address' => 'required|string',
-            'shipping_phone' => 'required|string',
-            'shipping_name' => 'required|string',
-            'shipping_email' => 'required|email',
-            'payment_method' => 'required|in:paypal,visa,cash',
-            'note' => 'nullable|string'
-        ]);
-
-        $cart = Cart::where('user_id', Auth::id())->with('cartItems.product')->first();
-
-        if (!$cart || $cart->cartItems->isEmpty()) {
-            return redirect()->back()->with('error', 'Your cart is empty');
-        }
-
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'total_amount' => $cart->total_amount,
-            'status' => 'pending',
-            'payment_method' => $request->payment_method,
-            'payment_status' => 'pending',
-            'shipping_address' => $request->shipping_address,
-            'shipping_phone' => $request->shipping_phone,
-            'shipping_name' => $request->shipping_name,
-            'shipping_email' => $request->shipping_email,
-            'note' => $request->note
-        ]);
-
-        foreach ($cart->cartItems as $cartItem) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $cartItem->product_id,
-                'quantity' => $cartItem->quantity,
-                'price' => $cartItem->price
+        try {
+            $request->validate([
+                'shipping_address' => 'required|string',
+                'shipping_phone' => 'required|string',
+                'shipping_name' => 'required|string',
+                'shipping_email' => 'required|email',
+                'payment_method' => 'required|in:paypal,visa,cash',
+                'note' => 'nullable|string'
             ]);
+
+            $cart = Cart::where('user_id', Auth::id())->with('cartItems.product')->first();
+
+            if (!$cart || $cart->cartItems->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Giỏ hàng của bạn đang trống'
+                ], 400);
+            }
+
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'total_amount' => $cart->total_amount,
+                'status' => 'pending',
+                'payment_method' => $request->payment_method,
+                'payment_status' => $request->payment_method === 'cash' ? 'pending' : 'pending',
+                'shipping_address' => $request->shipping_address,
+                'shipping_phone' => $request->shipping_phone,
+                'shipping_name' => $request->shipping_name,
+                'shipping_email' => $request->shipping_email,
+                'note' => $request->note
+            ]);
+
+            foreach ($cart->cartItems as $cartItem) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'quantity' => $cartItem->quantity,
+                    'price' => $cartItem->price
+                ]);
+            }
+
+            // Clear the cart
+            $cart->cartItems()->delete();
+            $cart->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đơn hàng đã được tạo thành công',
+                'order' => $order
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        // Clear the cart
-        $cart->cartItems()->delete();
-        $cart->delete();
-
-        if ($request->payment_method === 'paypal') {
-            // Redirect to PayPal payment
-            return redirect()->route('payment.paypal', $order);
-        } elseif ($request->payment_method === 'visa') {
-            // Redirect to Visa payment
-            return redirect()->route('payment.visa', $order);
-        }
-
-        // For cash payment
-        return redirect()->route('orders.success', $order)->with('success', 'Order placed successfully');
     }
 
     public function success(Order $order)

@@ -206,7 +206,7 @@
         function handleLogout(event) {
             event.preventDefault();
 
-            window.axios.post('/api/logout')
+            window.axios.post('/logout')
                 .then(response => {
                     if (response.data.message) {
                         // Clear localStorage
@@ -232,7 +232,7 @@
                 return;
             }
 
-            window.axios.post(`/api/cart/add/${productId}`, {
+            window.axios.post(`/cart/add/${productId}`, {
                 quantity: quantity
             },
                 {

@@ -1,27 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../components/Login.vue';
-import Register from '../components/Register.vue';
-import Cart from '../components/Cart.vue';
 
 const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: { guest: true }
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
-    meta: { guest: true }
-  },
-  {
-    path: '/cart',
-    name: 'Cart',
-    component: Cart,
-    meta: { requiresAuth: true }
-  }
 ];
 
 const router = createRouter({

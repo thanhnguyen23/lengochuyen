@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController as ApiCartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -33,13 +34,11 @@ Route::get('/products/search', [ProductController::class, 'search'])->name('prod
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 // Cart routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-});
+Route::view('/cart', 'cart.index')->name('cart.index');
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
 
 // Order routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/success/{order}', [OrderController::class, 'success'])->name('orders.success');
 });
@@ -48,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/payment/paypal/{order}', [PaymentController::class, 'paypal'])->name('payment.paypal');
     Route::get('/payment/visa/{order}', [PaymentController::class, 'visa'])->name('payment.visa');
+    Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 });
 
 // Auth routes

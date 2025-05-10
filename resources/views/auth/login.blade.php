@@ -82,11 +82,11 @@ function handleLogin(event) {
         return false;
     }
 
-    window.axios.post('/api/login', {
-        email: formData.get('email'),
-        password: formData.get('password'),
-        remember: formData.get('remember') === 'on'
-    })
+    window.axios.post('/login', {
+            email: formData.get('email'),
+            password: formData.get('password'),
+            remember: formData.get('remember') === 'on'
+        })
     .then(response => {
         const { data } = response;
         if (data.token) {
@@ -107,7 +107,7 @@ function handleLogin(event) {
         if (error.response && error.response.data) {
             showAlert(error.response.data.message || 'Email hoặc mật khẩu không đúng', 'danger');
         } else {
-            showAlert('Có lỗi xảy ra khi đăng nhập', 'danger');
+        showAlert('Có lỗi xảy ra khi đăng nhập', 'danger');
         }
     });
 

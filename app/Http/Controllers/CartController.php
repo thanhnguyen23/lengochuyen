@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function index()
     {
@@ -28,7 +24,9 @@ class CartController extends Controller
             ]);
         }
 
-        return view('cart.index', compact('cart'));
+        return response()->json([
+            'cart' => $cart
+        ]);
     }
 
     public function addToCart(Request $request, Product $product)

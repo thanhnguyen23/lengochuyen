@@ -49,15 +49,16 @@ class PaymentService
             ->post($url, [
                 'intent' => 'CAPTURE',
                 'application_context' => [
-                    'return_url' => route('payment.success'),
-                    'cancel_url' => route('payment.cancel'),
+                    'return_url' => config('app.url') . '/payment/success',
+                    'cancel_url' => config('app.url') . '/payment/cancel',
                 ],
                 'purchase_units' => [
                     [
                         'amount' => [
                             'currency_code' => 'USD',
                             'value' => number_format($order->total_amount, 2, '.', '')
-                        ]
+                        ],
+                        'description' => 'Order #' . $order->id
                     ]
                 ]
             ]);
@@ -74,13 +75,13 @@ class PaymentService
         throw new \Exception('Failed to create PayPal order');
     }
 
-    public function capturePayment($orderId)
+    public function capturePayment($token)
     {
         $accessToken = $this->getAccessToken();
 
         $url = $this->mode === 'sandbox'
-            ? "https://api-m.sandbox.paypal.com/v2/checkout/orders/{$orderId}/capture"
-            : "https://api-m.paypal.com/v2/checkout/orders/{$orderId}/capture";
+            ? "https://api-m.sandbox.paypal.com/v2/checkout/orders/{$token}/capture"
+            : "https://api-m.paypal.com/v2/checkout/orders/{$token}/capture";
 
         $response = Http::withToken($accessToken)
             ->post($url);

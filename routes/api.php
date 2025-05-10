@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'addToCart']);
     Route::patch('/cart/items/{cartItem}', [CartController::class, 'updateQuantity']);
     Route::delete('/cart/items/{cartItem}', [CartController::class, 'removeItem']);
+
+    // Order routes
+    Route::post('/orders', [OrderController::class, 'store']);
+
+    // Payment API routes
+    Route::post('/payment/paypal/create', [PaymentController::class, 'createPaypalOrder']);
+    Route::post('/payment/paypal/capture', [PaymentController::class, 'capturePaypalPayment']);
+    Route::post('/payment/paypal/cancel', [PaymentController::class, 'cancelPaypalPayment']);
 });
 

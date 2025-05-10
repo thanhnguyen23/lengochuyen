@@ -101,12 +101,12 @@ function handleRegister(event) {
     document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     document.querySelectorAll('.invalid-feedback').forEach(el => el.innerHTML = '');
 
-    window.axios.post('/api/register', {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        password_confirmation: formData.get('password_confirmation')
-    })
+    window.axios.post('/register', {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            password_confirmation: formData.get('password_confirmation')
+        })
     .then(response => {
         const { data } = response;
         if (data.token) {
@@ -131,7 +131,7 @@ function handleRegister(event) {
                 showAlert(error.response.data.message || 'Có lỗi xảy ra khi đăng ký', 'danger');
             }
         } else {
-            showAlert('Có lỗi xảy ra khi đăng ký', 'danger');
+        showAlert('Có lỗi xảy ra khi đăng ký', 'danger');
         }
     });
 
